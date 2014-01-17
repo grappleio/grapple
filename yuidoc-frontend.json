@@ -1,0 +1,11 @@
+{
+	"name": "grapple.io",
+    "description": "Making Meetings Productive!",
+    "version": "0.0.0",
+    "url": "https://github.com/grappleio/grapple.io",
+    "options": {
+        "paths": "./app/src/",
+        "outdir": "yuidocs/frontend",
+        "exclude": "bower_components,build,deploys,test"
+    }
+}
