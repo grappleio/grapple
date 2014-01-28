@@ -12,6 +12,7 @@ lib-cov
 pids
 logs
 results
+*.bat
 
 # node and node packages (local installs that should not be tracked)
 npm-debug.log

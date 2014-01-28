@@ -1,0 +1,25 @@
+- if (req.isAuthenticated())
+	nav.navbar-default.navbar-static-side(role='navigation')
+		div.sidebar-collapse
+			ul#side-menu.nav
+				li.sidebar-search
+					div.input-group.custom-search-form
+						input.form-control(type="text",placeholder="Search")
+						span.input-group-btn
+							button.btn.btn-default(type="button")
+								i.fa.fa-search
+				li
+					a(href="/")
+						i.fa.fa-dashboard.fa-fw 
+						|  Dashboard
+				li
+					a(href="#")
+						i.fa.fa-bar-chart-o.fa-fw
+						|  Charts
+						span.fa.arrow
+					ul.nav.nav-second-level
+						li
+							a(href="flot.html") Flot Charts
+						li
+							a(href="morris.html") Morris Charts
+

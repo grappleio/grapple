@@ -1,0 +1,38 @@
+extends ../layouts/default
+
+block main
+  div.row
+    div.col-lg-12
+      h1.page-header Dashboard
+
+block content
+  .row
+    .col-lg-8
+      .panel.panel-success
+        .panel-heading
+          i.fa.fa-bar-chart-o.fa-fw
+          |  Current Meetings
+          .pull-right
+            .btn-group
+              button.btn.btn-default.btn-xs.dropdown-toggle(type='button', data-toggle='dropdown')
+                | Actions
+                span.caret
+              ul.dropdown-menu.pull-right(role='menu')
+                li
+                  a(href="#") Lookup a Meeting
+                li
+                  a(href="#") Create a New Meeting
+        .panel-body
+          #currentMeetingsBody
+          | Congrats you are a meeting-less person.
+          | Don't let the boss find out.
+      .panel.panel-default
+        .panel-heading
+    .col-lg-4
+      .panel.panel-success
+        .panel-heading
+          i.fa.fa-exclamation-circle.fa-fw.text-success
+          | Upcoming Meetings
+        .panel-body
+          #upcomingMeetingsBody
+            | No upcoming meetings. Strange.
