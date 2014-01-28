@@ -1,0 +1,48 @@
+extends ../layouts/default
+
+block main
+  h1= title
+  hr
+
+block content
+  - var action = '/items'
+  - action += item.isNew? '' : '/' + item.id
+
+  .row
+    .col-md-8
+      form.form-horizontal(method="post", action=action, enctype="multipart/form-data", role="form")
+
+        input(type="hidden", name="_csrf", value="#{csrf_token}")
+
+        - if (!item.isNew)
+          input(type="hidden", name="_method", value="PUT")
+
+        .form-group
+          label.col-sm-2.control-label(for='title') Title
+          .col-sm-10
+            input.form-control#title(type='text', name="title", value=item.title, placeholder='Enter the title')
+
+        .form-group
+          label.col-sm-2.control-label(for='file') Image
+          .col-sm-10
+            input.form-control#file(type='file', name="image[]")
+
+        .form-group
+          label.col-sm-2.control-label(for='desc') Body
+          .col-sm-10
+            textarea.form-control#desc(rows="5", name="body", placeholder='Enter the item description')=item.body
+
+        .form-group
+          label.col-sm-2.control-label(for='tags') Tags
+          .col-sm-10
+            input.form-control#tags(type='text', name="tags", value=item.tags, placeholder='Enter the tags')
+
+        .form-group
+          .col-sm-offset-2.col-sm-10
+            button.btn.btn-primary(type='submit') Save
+            | &nbsp;
+            a.btn(href='/items', title="cancel") Cancel
+
+    .col-md-4
+      - if (!item.isNew && item.image && item.image.files && item.image.files.length)
+        img(src=item.image.cdnUri + "/mini_" + item.image.files[0])

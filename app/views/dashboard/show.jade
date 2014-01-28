@@ -1,0 +1,40 @@
+extends ../layouts/default
+
+block main
+  h1= meeting.title
+
+block content
+  .row
+    .col-md-8
+      p=meeting.body
+      .meta
+        - if (meeting.user)
+          - var name = meeting.user.name ? meeting.user.name : meeting.user.username
+          p Author :&nbsp;
+            a(href="/users/"+meeting.user._id)= name
+
+        - if (meeting.tags)
+          p Tags &nbsp;
+            - each tag in meeting.tags.split(',')
+              i.muted.fa.fa-tag &nbsp;
+              a.tag(href="/tags/"+tag)= tag
+              | &nbsp;&nbsp;
+
+        p.muted= formatDate(meeting.createdAt, "%b %d, %Y at %I:%M %p")
+
+    .col-md-4
+      - if (!meeting.isNew && meeting.image && meeting.image.files && meeting.image.files.length)
+        img(src=meeting.image.cdnUri + '/mini_' + meeting.image.files[0])
+
+  form(action="/meetings/"+meeting.id, method="post", onsubmit="return confirm('Are you sure?')")
+    input(type='hidden', name='_csrf', value="#{csrf_token}")
+    a.btn.btn-default(href='/meetings/'+meeting._id+'/edit', title="edit") Edit
+    | &nbsp;
+    input(type="hidden", name="_method", value="DELETE")
+    button.btn.btn-danger(type="submit") Delete
+
+  br
+  h3 Comments
+  - each comment in meeting.comments
+    include ../comments/comment
+  include ../comments/form

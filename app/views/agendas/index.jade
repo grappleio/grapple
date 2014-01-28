@@ -1,0 +1,38 @@
+extends ../layouts/default
+
+block main
+  h1= title
+
+block content
+  - if (agendas.length)
+    - each agenda in agendas
+      .agenda
+        h3
+          a(href='/agendas/'+agenda._id, title=agenda.title) #{agenda.title}
+        p= agenda.body
+
+        .meta
+          span.muted= formatDate(agenda.createdAt)
+
+          - if (agenda.user)
+            | &nbsp; - &nbsp;
+            span Author &nbsp;
+
+            - var name = agenda.user.name ? agenda.user.name : agenda.user.username
+
+            a(href="/users/"+agenda.user._id)= name
+
+          - if (agenda.tags)
+            | &nbsp; - &nbsp;
+            span Tags &nbsp;
+            - each tag in agenda.tags.split(',')
+              i.muted.fa.fa-tag &nbsp;
+              a.tag(href="/tags/"+tag)= tag
+              | &nbsp;&nbsp;
+
+    - if (pages > 1)
+      ul.pagination
+        != createPagination(pages, page)
+  - else
+    h4.muted No agendas.&nbsp;
+      a(href="/agendas/new") create one

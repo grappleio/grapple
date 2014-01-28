@@ -1,0 +1,40 @@
+extends ../layouts/default
+
+block main
+  h1= item.title
+
+block content
+  .row
+    .col-md-8
+      p=item.body
+      .meta
+        - if (item.user)
+          - var name = item.user.name ? item.user.name : item.user.username
+          p Author :&nbsp;
+            a(href="/users/"+item.user._id)= name
+
+        - if (item.tags)
+          p Tags &nbsp;
+            - each tag in item.tags.split(',')
+              i.muted.fa.fa-tag &nbsp;
+              a.tag(href="/tags/"+tag)= tag
+              | &nbsp;&nbsp;
+
+        p.muted= formatDate(item.createdAt, "%b %d, %Y at %I:%M %p")
+
+    .col-md-4
+      - if (!item.isNew && item.image && item.image.files && item.image.files.length)
+        img(src=item.image.cdnUri + '/mini_' + item.image.files[0])
+
+  form(action="/items/"+item.id, method="post", onsubmit="return confirm('Are you sure?')")
+    input(type='hidden', name='_csrf', value="#{csrf_token}")
+    a.btn.btn-default(href='/items/'+item._id+'/edit', title="edit") Edit
+    | &nbsp;
+    input(type="hidden", name="_method", value="DELETE")
+    button.btn.btn-danger(type="submit") Delete
+
+  br
+  h3 Comments
+  - each comment in item.comments
+    include ../comments/comment
+  include ../comments/form

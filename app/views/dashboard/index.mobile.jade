@@ -1,0 +1,31 @@
+extends ../layouts/mobile
+
+block main
+  h1= title
+
+block content
+  - each meeting in meetings
+    .meeting
+      h3
+        a(href='/meetings/'+meeting._id, title=meeting.title) #{meeting.title}
+      p= meeting.body
+
+      .meta.muted
+        span= formatDate(meeting.createdAt)
+        | &nbsp; - &nbsp;
+        span Author &nbsp;
+
+        - var name = meeting.user.name ? meeting.user.name : meeting.user.username
+
+        a(href="/users/"+meeting.user._id)= name
+        &nbsp; - &nbsp;
+        - if (meeting.tags)
+          - each tag in meeting.tags.split(',')
+            | &nbsp;
+            a.tag(href="/tags/"+tag)
+              i.icon-tags
+              |  #{tag}
+
+  - if (pages > 1)
+    ul.pagination
+      != createPagination(pages, page)

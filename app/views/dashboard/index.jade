@@ -1,0 +1,38 @@
+extends ../layouts/default
+
+block main
+  h1 Dashboard
+
+block content
+  - if (meetings.length)
+    - each meeting in meetings
+      .meeting
+        h3
+          a(href='/meetings/'+meeting._id, title=meeting.title) #{meeting.title}
+        p= meeting.body
+
+        .meta
+          span.muted= formatDate(meeting.createdAt)
+
+          - if (meeting.user)
+            | &nbsp; - &nbsp;
+            span Author &nbsp;
+
+            - var name = meeting.user.name ? meeting.user.name : meeting.user.username
+
+            a(href="/users/"+meeting.user._id)= name
+
+          - if (meeting.tags)
+            | &nbsp; - &nbsp;
+            span Tags &nbsp;
+            - each tag in meeting.tags.split(',')
+              i.muted.fa.fa-tag &nbsp;
+              a.tag(href="/tags/"+tag)= tag
+              | &nbsp;&nbsp;
+
+    - if (pages > 1)
+      ul.pagination
+        != createPagination(pages, page)
+  - else
+    h4.muted No meetings.&nbsp;
+      a(href="/meetings/new") create one

@@ -1,0 +1,41 @@
+extends ../layouts/mobile
+
+
+block main
+  h1= meeting.title
+
+block content
+  .row
+    .span9
+      p=meeting.body
+      .meta.muted
+        - var name = meeting.user.name ? meeting.user.name : meeting.user.username
+        p Author -&nbsp;
+          a(href="/users/"+meeting.user._id)= name
+        p.muted= formatDate(meeting.createdAt, "%b %d, %Y at %I:%M %p")
+        - if (meeting.tags)
+          .tags
+            - each tag in meeting.tags.split(',')
+              a.tag(href="/tags/"+tag)
+                i.icon-tags
+                |  #{tag}
+              | &nbsp;&nbsp;
+    .span3
+      - if (!meeting.isNew && meeting.image && meeting.image.files && meeting.image.files.length)
+        img(src=meeting.image.cdnUri + '/mini_' + meeting.image.files[0])
+
+  p
+    br
+    form.center.form-inline.confirm(action="/meetings/"+meeting.id, method="post")
+      input(type='hidden', name='_csrf', value="#{csrf_token}")
+      a.btn(href='/meetings/'+meeting._id+'/edit', title="edit") Edit
+      | &nbsp;&nbsp;
+      input(type="hidden", name="_method", value="DELETE")
+      button.btn.btn-danger(type="submit") delete
+
+  p
+    br
+    h3 Comments
+    - each comment in meeting.comments
+      include ../comments/comment
+    include ../comments/form

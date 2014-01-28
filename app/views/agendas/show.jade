@@ -1,0 +1,39 @@
+extends ../layouts/default
+
+block main
+  h1= agenda.title
+
+block content
+  .row
+    .col-md-8
+      p=agenda.body
+      .meta
+        - if (agenda.user)
+          - var name = agenda.user.name ? agenda.user.name : agenda.user.username
+          p Author :&nbsp;
+            a(href="/users/"+agenda.user._id)= name
+
+        - if (agenda.tags)
+          p Tags &nbsp;
+            - each tag in agenda.tags.split(',')
+              i.muted.fa.fa-tag &nbsp;
+              a.tag(href="/tags/"+tag)= tag
+              | &nbsp;&nbsp;
+
+        p.muted= formatDate(agenda.createdAt, "%b %d, %Y at %I:%M %p")
+
+    .col-md-4
+     
+
+  form(action="/agendas/"+agenda.id, method="post", onsubmit="return confirm('Are you sure?')")
+    input(type='hidden', name='_csrf', value="#{csrf_token}")
+    a.btn.btn-default(href='/agendas/'+agenda._id+'/edit', title="edit") Edit
+    | &nbsp;
+    input(type="hidden", name="_method", value="DELETE")
+    button.btn.btn-danger(type="submit") Delete
+
+  br
+  h3 Comments
+  - each comment in agenda.comments
+    include ../comments/comment
+  include ../comments/form
