@@ -37,6 +37,21 @@ var AgendaSchema = new Schema({
     body: { type : String, default : '' },
     user: { type : Schema.ObjectId, ref : 'User' },
     createdAt: { type : Date, default : Date.now }
+  }]
+  organizedBy : {type : Schema.ObjectId, ref : 'User'},
+  items : [{
+    itemId : {type: Schema.ObjectId, ref: 'Items'},
+    itemType : {type: String, default : 'agenda', enum:['agenda','old','new']},
+    comments :[{
+       body: { type : String, default : '' },
+       user: { type : Schema.ObjectId, ref : 'User' },
+       createdAt: { type : Date, default : Date.now }
+    }],
+    commentsEnabled: { type: Boolean, default: true},
+    itemVoteOpenBy : {type : Date},
+    itemVoteClosedBy : {type: Date},
+    itemVoteEnabled : {type: Boolean, default: true}
+    //leaving itemVoteCount in the meeting.
   }],
   tags: {type: [], get: getTags, set: setTags},
   createdAt  : {type : Date, default : Date.now}

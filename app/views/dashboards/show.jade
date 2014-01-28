@@ -1,8 +1,8 @@
 extends ../layouts/default
 
 block main
-  div.row
-    div.col-lg-12
+  .row
+    .col-lg-12
       h1.page-header Dashboard
 
 block content
@@ -19,20 +19,34 @@ block content
                 span.caret
               ul.dropdown-menu.pull-right(role='menu')
                 li
-                  a(href="#") Lookup a Meeting
+                  a(href="/meetings/") Lookup a Meeting
                 li
-                  a(href="#") Create a New Meeting
+                  a(href="/meetings/new") Create a New Meeting
         .panel-body
           #currentMeetingsBody
-          | Congrats you are a meeting-less person.
-          | Don't let the boss find out.
+            | Congrats you are a meeting-less person.
+            | Don't let the boss find out.
       .panel.panel-default
         .panel-heading
+          i.fa.fa-info.fa.fw
+          |  Voting requests
+        .panel-body
+          #currentVotingRequests
+            |  No current requests for input. Create some?
+            i.fa.fa-plus-square.fa.fw
     .col-lg-4
       .panel.panel-success
         .panel-heading
           i.fa.fa-exclamation-circle.fa-fw.text-success
-          | Upcoming Meetings
+          |  Upcoming Meetings
         .panel-body
           #upcomingMeetingsBody
             | No upcoming meetings. Strange.
+    .col-lg-4
+      .panel.panel-default
+        .panel-heading
+          i.fa.fa-gavel.fa-fw
+          |  Finished Meetings
+        .panel-body
+          #finishedMeetings
+            | No completed Meetings

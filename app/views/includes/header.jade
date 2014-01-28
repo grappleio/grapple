@@ -15,9 +15,10 @@ nav.navbar.navbar-default.navbar-static-top(role='navigation', style='margin-bot
           li
             a(href="#")
               div
-                strong=req.user.name
-                span.pull-right.text-muted
-                  em SomeDay
+                - if(req.user)
+                  strong=req.user.name
+                  span.pull-right.text-muted
+                    em SomeDay
               div Some text some where
           li.divider
           li

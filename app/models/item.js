@@ -38,6 +38,9 @@ var ItemSchema = new Schema({
     user: { type : Schema.ObjectId, ref : 'User' },
     createdAt: { type : Date, default : Date.now }
   }],
+  votePositionOne:{type: String, default : 'Approve', trim : true},
+  votePositionTwo: {type: String, default : 'Disapprove', trim : true},
+  votePositionThree: {type: String, default : 'Abstain' },
   tags: {type: [], get: getTags, set: setTags},
   createdAt  : {type : Date, default : Date.now}
 })
@@ -46,7 +49,7 @@ var ItemSchema = new Schema({
  * Validations
  */
 ItemSchema.path('title').required(true, 'Item title cannot be blank');
-ItemSchema.path('desc').required(true, 'Description body cannot be blank');
+ItemSchema.path('desc').required(true, 'Description cannot be blank');
 
 /**
  * Pre-remove hook

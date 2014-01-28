@@ -1,15 +1,17 @@
 extends ../layouts/default
 
 block main
-  h1= title
-  hr
+  .row
+    .col-lg-12
+      h1= title
+
 
 block content
   - var action = '/items'
   - action += item.isNew? '' : '/' + item.id
 
   .row
-    .col-md-8
+    .col-lg-8
       form.form-horizontal(method="post", action=action, enctype="multipart/form-data", role="form")
 
         input(type="hidden", name="_csrf", value="#{csrf_token}")
@@ -28,9 +30,9 @@ block content
             input.form-control#file(type='file', name="image[]")
 
         .form-group
-          label.col-sm-2.control-label(for='desc') Body
+          label.col-sm-2.control-label(for='desc') Description
           .col-sm-10
-            textarea.form-control#desc(rows="5", name="body", placeholder='Enter the item description')=item.body
+            textarea.form-control#desc(rows="5", name="desc", placeholder='Enter the item description')=item.desc
 
         .form-group
           label.col-sm-2.control-label(for='tags') Tags
@@ -43,6 +45,6 @@ block content
             | &nbsp;
             a.btn(href='/items', title="cancel") Cancel
 
-    .col-md-4
+    .col-lg-4
       - if (!item.isNew && item.image && item.image.files && item.image.files.length)
         img(src=item.image.cdnUri + "/mini_" + item.image.files[0])

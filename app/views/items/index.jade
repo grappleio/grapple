@@ -9,7 +9,7 @@ block content
       .item
         h3
           a(href='/items/'+item._id, title=item.title) #{item.title}
-        p= item.body
+        p= item.desc
 
         .meta
           span.muted= formatDate(item.createdAt)

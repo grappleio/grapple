@@ -6,7 +6,7 @@ block main
 block content
   .row
     .col-md-8
-      p=item.body
+      p=item.desc
       .meta
         - if (item.user)
           - var name = item.user.name ? item.user.name : item.user.username
