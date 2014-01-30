@@ -37,7 +37,7 @@ var AgendaSchema = new Schema({
     body: { type : String, default : '' },
     user: { type : Schema.ObjectId, ref : 'User' },
     createdAt: { type : Date, default : Date.now }
-  }]
+  }],
   organizedBy : {type : Schema.ObjectId, ref : 'User'},
   items : [{
     itemId : {type: Schema.ObjectId, ref: 'Items'},

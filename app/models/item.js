@@ -1,29 +1,29 @@
-
+/*globals require,process */
 /**
  * Module dependencies.
  */
 
-var mongoose = require('mongoose')
-  , env = process.env.NODE_ENV || 'development'
-  , config = require('../../config/config')[env]
-  , Schema = mongoose.Schema
-  , utils = require('../../lib/utils')
+var mongoose = require('mongoose'),
+  env = process.env.NODE_ENV || 'development',
+  config = require('../../config/config')[env],
+  Schema = mongoose.Schema,
+  utils = require('../../lib/utils');
 
 /**
  * Getters
  */
 
 var getTags = function (tags) {
-  return tags.join(',')
-}
+  return tags.join(',');
+};
 
 /**
  * Setters
  */
 
 var setTags = function (tags) {
-  return tags.split(',')
-}
+  return tags.split(',');
+};
 
 /**
  * Item Schema
@@ -43,7 +43,7 @@ var ItemSchema = new Schema({
   votePositionThree: {type: String, default : 'Abstain' },
   tags: {type: [], get: getTags, set: setTags},
   createdAt  : {type : Date, default : Date.now}
-})
+});
 
 /**
  * Validations
@@ -57,8 +57,8 @@ ItemSchema.path('desc').required(true, 'Description cannot be blank');
 
 ItemSchema.pre('remove', function (next) {
   
-  next()
-})
+  next();
+});
 
 /**
  * Methods
@@ -75,7 +75,7 @@ ItemSchema.methods = {
    */
 
   uploadAndSave: function (images, cb) {
-     this.save(cb)
+     this.save(cb);
   },
 
   /**
@@ -92,9 +92,9 @@ ItemSchema.methods = {
     this.comments.push({
       body: comment.body,
       user: user._id
-    })
+    });
 
-    this.save(cb)
+    this.save(cb);
   },
 
   /**
@@ -106,12 +106,13 @@ ItemSchema.methods = {
    */
 
   removeComment: function (commentId, cb) {
-    var index = utils.indexof(this.comments, { id: commentId })
+    var index = utils.indexof(this.comments, { id: commentId });
+
     if (~index) this.comments.splice(index, 1)
     else return cb('not found')
-    this.save(cb)
+    this.save(cb);
   }
-}
+};
 
 /**
  * Statics
@@ -131,7 +132,7 @@ ItemSchema.statics = {
     this.findOne({ _id : id })
       .populate('user', 'name email username')
       .populate('comments.user')
-      .exec(cb)
+      .exec(cb);
   },
 
   /**
@@ -143,16 +144,16 @@ ItemSchema.statics = {
    */
 
   list: function (options, cb) {
-    var criteria = options.criteria || {}
+    var criteria = options.criteria || {};
 
     this.find(criteria)
       .populate('user', 'name username')
       .sort({'createdAt': -1}) // sort by date
       .limit(options.perPage)
       .skip(options.perPage * options.page)
-      .exec(cb)
+      .exec(cb);
   }
 
-}
+};
 
-mongoose.model('Item', ItemSchema)
+mongoose.model('Item', ItemSchema);

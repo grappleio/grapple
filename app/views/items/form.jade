@@ -40,6 +40,21 @@ block content
             input.form-control#tags(type='text', name="tags", value=item.tags, placeholder='Enter the tags')
 
         .form-group
+          label.col-sm-2.control-label(for='votePositionOne') Vote Up
+          .col-sm-10
+            input.form-control#votePositionOne(type='text', name='voteUp', value=item.votePositionOne, placeholder='Text for Up Position')
+
+        .form-group
+          label.col-sm-2.control-label(for='voteNeutral') Vote Neutral
+          .col-sm-10
+            input.form-control#votePositionTwo(type='text', name='voteNeutral', value=item.votePositionTwo, placeholder='Text for Nuetral Position')
+
+        .form-group
+          label.col-sm-2.control-label(for='votePositionDown') Vote Down
+          .col-sm-10
+            input.form-control#votePositionThree(type='text', name='voteDown', value=item.votePositionThree, placeholder='Text for Down Position')
+
+        .form-group
           .col-sm-offset-2.col-sm-10
             button.btn.btn-primary(type='submit') Save
             | &nbsp;

@@ -17,6 +17,7 @@ results
 # node and node packages (local installs that should not be tracked)
 npm-debug.log
 node_modules
+UnixStart.sh
 
 # bower components (local installs that should not be tracked)
 app/src/bower_components
