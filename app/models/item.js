@@ -4,25 +4,25 @@
  */
 
 var mongoose = require('mongoose'),
-  env = process.env.NODE_ENV || 'development',
-  config = require('../../config/config')[env],
-  Schema = mongoose.Schema,
-  utils = require('../../lib/utils');
+    env = process.env.NODE_ENV || 'development',
+    config = require('../../config/config')[env],
+    Schema = mongoose.Schema,
+    utils = require('../../lib/utils');
 
 /**
  * Getters
  */
 
-var getTags = function (tags) {
-  return tags.join(',');
+var getTags = function(tags) {
+    return tags.join(',');
 };
 
 /**
  * Setters
  */
 
-var setTags = function (tags) {
-  return tags.split(',');
+var setTags = function(tags) {
+    return tags.split(',');
 };
 
 /**
@@ -30,19 +30,101 @@ var setTags = function (tags) {
  */
 
 var ItemSchema = new Schema({
-  title: {type : String, default : '', trim : true},
-  desc: {type : String, default : '', trim : true},
-  user: {type : Schema.ObjectId, ref : 'User'},
-  comments: [{
-    body: { type : String, default : '' },
-    user: { type : Schema.ObjectId, ref : 'User' },
-    createdAt: { type : Date, default : Date.now }
-  }],
-  votePositionOne:{type: String, default : 'Approve', trim : true},
-  votePositionTwo: {type: String, default : 'Disapprove', trim : true},
-  votePositionThree: {type: String, default : 'Abstain' },
-  tags: {type: [], get: getTags, set: setTags},
-  createdAt  : {type : Date, default : Date.now}
+    title: {
+        type: String,
+        default: '',
+        trim: true
+    },
+    desc: {
+        type: String,
+        default: '',
+        trim: true
+    },
+    user: {
+        type: Schema.ObjectId,
+        ref: 'User'
+    },
+    comments: [{
+        body: {
+            type: String,
+            default: ''
+        },
+        user: {
+            type: Schema.ObjectId,
+            ref: 'User'
+        },
+        createdAt: {
+            type: Date,
+            default: Date.now
+        }
+    }],
+    votePositionOne: {
+        type: String,
+        default: 'Approve',
+        trim: true
+    },
+    votePositionTwo: {
+        type: String,
+        default: 'Disapprove',
+        trim: true
+    },
+    votePositionThree: {
+        type: String,
+        default: 'Abstain'
+    },
+    tags: {
+        type: [],
+        get: getTags,
+        set: setTags
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    },
+    itemType: {
+        type: String,
+        default: 'agenda',
+        enum: ['agenda', 'old', 'new']
+    },
+    comments: [{
+        body: {
+            type: String,
+            default: ''
+        },
+        user: {
+            type: Schema.ObjectId,
+            ref: 'User'
+        },
+        createdAt: {
+            type: Date,
+            default: Date.now
+        }
+    }],
+    commentsEnabled: {
+        type: Boolean,
+        default: true
+    },
+    itemVoteOpenBy: {
+        type: Date
+    },
+    itemVoteClosedBy: {
+        type: Date
+    },
+    itemVoteEnabled: {
+        type: Boolean,
+        default: true
+    },
+    presenter: {
+        type: String,
+        default: ''
+    },
+    timeAlloted: {
+        type: Number
+    },
+    complete: {
+        type: Boolean,
+        default: false
+    }
 });
 
 /**
@@ -55,9 +137,9 @@ ItemSchema.path('desc').required(true, 'Description cannot be blank');
  * Pre-remove hook
  */
 
-ItemSchema.pre('remove', function (next) {
-  
-  next();
+ItemSchema.pre('remove', function(next) {
+
+    next();
 });
 
 /**
@@ -66,52 +148,54 @@ ItemSchema.pre('remove', function (next) {
 
 ItemSchema.methods = {
 
-  /**
-   * Save item and upload image
-   *
-   * @param {Object} images
-   * @param {Function} cb
-   * @api private
-   */
+    /**
+     * Save item and upload image
+     *
+     * @param {Object} images
+     * @param {Function} cb
+     * @api private
+     */
 
-  uploadAndSave: function (images, cb) {
-     this.save(cb);
-  },
+    uploadAndSave: function(images, cb) {
+        this.save(cb);
+    },
 
-  /**
-   * Add comment
-   *
-   * @param {User} user
-   * @param {Object} comment
-   * @param {Function} cb
-   * @api private
-   */
+    /**
+     * Add comment
+     *
+     * @param {User} user
+     * @param {Object} comment
+     * @param {Function} cb
+     * @api private
+     */
 
-  addComment: function (user, comment, cb) {
+    addComment: function(user, comment, cb) {
 
-    this.comments.push({
-      body: comment.body,
-      user: user._id
-    });
+        this.comments.push({
+            body: comment.body,
+            user: user._id
+        });
 
-    this.save(cb);
-  },
+        this.save(cb);
+    },
 
-  /**
-   * Remove comment
-   *
-   * @param {commentId} String
-   * @param {Function} cb
-   * @api private
-   */
+    /**
+     * Remove comment
+     *
+     * @param {commentId} String
+     * @param {Function} cb
+     * @api private
+     */
 
-  removeComment: function (commentId, cb) {
-    var index = utils.indexof(this.comments, { id: commentId });
+    removeComment: function(commentId, cb) {
+        var index = utils.indexof(this.comments, {
+            id: commentId
+        });
 
-    if (~index) this.comments.splice(index, 1)
-    else return cb('not found')
-    this.save(cb);
-  }
+        if (~index) this.comments.splice(index, 1)
+        else return cb('not found')
+        this.save(cb);
+    }
 };
 
 /**
@@ -120,39 +204,43 @@ ItemSchema.methods = {
 
 ItemSchema.statics = {
 
-  /**
-   * Find Item by id
-   *
-   * @param {ObjectId} id
-   * @param {Function} cb
-   * @api private
-   */
+    /**
+     * Find Item by id
+     *
+     * @param {ObjectId} id
+     * @param {Function} cb
+     * @api private
+     */
 
-  load: function (id, cb) {
-    this.findOne({ _id : id })
-      .populate('user', 'name email username')
-      .populate('comments.user')
-      .exec(cb);
-  },
+    load: function(id, cb) {
+        this.findOne({
+            _id: id
+        })
+            .populate('user', 'name email username')
+            .populate('comments.user')
+            .exec(cb);
+    },
 
-  /**
-   * List item
-   *
-   * @param {Object} options
-   * @param {Function} cb
-   * @api private
-   */
+    /**
+     * List item
+     *
+     * @param {Object} options
+     * @param {Function} cb
+     * @api private
+     */
 
-  list: function (options, cb) {
-    var criteria = options.criteria || {};
+    list: function(options, cb) {
+        var criteria = options.criteria || {};
 
-    this.find(criteria)
-      .populate('user', 'name username')
-      .sort({'createdAt': -1}) // sort by date
-      .limit(options.perPage)
-      .skip(options.perPage * options.page)
-      .exec(cb);
-  }
+        this.find(criteria)
+            .populate('user', 'name username')
+            .sort({
+                'createdAt': -1
+            }) // sort by date
+        .limit(options.perPage)
+            .skip(options.perPage * options.page)
+            .exec(cb);
+    }
 
 };
 

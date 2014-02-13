@@ -1,15 +1,16 @@
 extends ../layouts/default
 
 block main
-  h1= title
-  hr
+  .row
+    .col-lg-12
+      h1.page-header= title
 
 block content
   - var action = '/agendas'
   - action += agenda.isNew? '' : '/' + agenda.id
 
   .row
-    .col-md-8
+    .col-lg-8
       form.form-horizontal(method="post", action=action, enctype="multipart/form-data", role="form")
 
         input(type="hidden", name="_csrf", value="#{csrf_token}")
@@ -22,23 +23,38 @@ block content
           .col-sm-10
             input.form-control#title(type='text', name="title", value=agenda.title, placeholder='Enter the title')
 
+        .form-group
+          label.col-sm-2.control-label(for='desc') Description
+          .col-sm-10
+            input.form-control#desc(type='textarea', name='desc',value=agenda.desc, placeholder='Enter a description')
 
         .form-group
-          label.col-sm-2.control-label(for='desc') Body
+          label.col-sm-2.control-label(for='organizedBy') Organized by
           .col-sm-10
-            textarea.form-control#desc(rows="5", name="body", placeholder='Enter the agenda description')=agenda.body
+            input.form-control#organizedBy(type='text', name='organizedBy', value=agenda.organizedBy, placeholder='Enter email for organizer')
+
+
+        //- .form-group
+        //-   label.col-sm-2.control-label(for='desc') Body
+        //-   .col-sm-10
+        //-     textarea.form-control#desc(rows="5", name="body", placeholder='Enter the agenda description')=agenda.body
 
         .form-group
           label.col-sm-2.control-label(for='tags') Tags
           .col-sm-10
             input.form-control#tags(type='text', name="tags", value=agenda.tags, placeholder='Enter the tags')
 
+        .list-group
+          - if(agenda.items)
+            - each item in agenda.items
+              include ./items
+              
         .form-group
           .col-sm-offset-2.col-sm-10
             button.btn.btn-primary(type='submit') Save
             | &nbsp;
             a.btn(href='/agendas', title="cancel") Cancel
 
-    .col-md-4
-      - if (!agenda.isNew && agenda.image && agenda.image.files && agenda.image.files.length)
-        img(src=agenda.image.cdnUri + "/mini_" + agenda.image.files[0])
+    //- .col-md-4
+    //-   - if (!agenda.isNew && agenda.image && agenda.image.files && agenda.image.files.length)
+    //-     img(src=agenda.image.cdnUri + "/mini_" + agenda.image.files[0])
